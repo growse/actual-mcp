@@ -41,4 +41,26 @@ describe('GetTransactionsDataFetcher', () => {
     expect(fetchAllTransactions).toHaveBeenCalledWith(accounts, start, end);
     expect(fetchTransactionsForAccount).not.toHaveBeenCalled();
   });
+
+  it('collapses transfer pairs when fetching across accounts', async () => {
+    vi.mocked(fetchAllTransactions).mockResolvedValue([
+      { id: 'out', account: 'checking', date: start, amount: -100, transfer_id: 'in' },
+      { id: 'in', account: 'loan', date: start, amount: 100, transfer_id: 'out' },
+    ]);
+
+    const result = await new GetTransactionsDataFetcher().fetch(undefined, start, end);
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toMatchObject({ id: 'out', payee_name: 'Transfer: Checking → Loan' });
+  });
+
+  it('does not collapse transfer pairs for a single account', async () => {
+    const legs = [
+      { id: 'out', account: 'checking', date: start, amount: -100, transfer_id: 'in' },
+      { id: 'in', account: 'checking', date: start, amount: 100, transfer_id: 'out' },
+    ];
+    vi.mocked(fetchTransactionsForAccount).mockResolvedValue(legs);
+
+    expect(await new GetTransactionsDataFetcher().fetch('checking', start, end)).toEqual(legs);
+  });
 });
