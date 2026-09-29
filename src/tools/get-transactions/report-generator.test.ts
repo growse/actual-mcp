@@ -107,4 +107,18 @@ describe('GetTransactionsReportGenerator', () => {
 
     expect(rowLines).toHaveLength(1);
   });
+
+  it('escapes pipes and newlines in payee, category and notes so the column count stays fixed', () => {
+    const md = generator.generate(
+      [{ ...regularRow, payee: 'A|B', category: 'Food | Drink', notes: 'Unifi ap | Amazon: AP\nsecond line' }],
+      '',
+      1,
+      1
+    );
+    const row = md.split('\n').find((line) => line.startsWith('| tx-3 |'))!;
+    expect(row).toBe(
+      '| tx-3 | 2024-05-02 | A\\|B | Food \\| Drink | -$12.34 | false | Unifi ap \\| Amazon: AP second line |  |'
+    );
+    expect(row.split(/(?<!\\)\|/).length - 2).toBe(8);
+  });
 });

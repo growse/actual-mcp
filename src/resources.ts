@@ -2,6 +2,7 @@
 // RESOURCES
 // ----------------------------
 
+import { escapeTableCell } from './utils/markdown.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { ListResourcesRequestSchema, ReadResourceRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
@@ -141,7 +142,7 @@ To view transactions for this account, use the get-transactions tool.`;
             const category: string = t.category_name || '(Uncategorized)';
             const notes: string = t.notes || '';
 
-            return `| ${date} | ${payee} | ${category} | ${amount} | ${notes} |`;
+            return `| ${date} | ${escapeTableCell(payee)} | ${escapeTableCell(category)} | ${amount} | ${escapeTableCell(notes)} |`;
           })
           .join('\n');
 

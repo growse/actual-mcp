@@ -1,6 +1,7 @@
 // Generates the markdown report for spending-by-category tool
 import type { GroupSpending } from './types.js';
 import { formatAmount } from '../../utils.js';
+import { escapeTableCell } from '../../utils/markdown.js';
 
 export class SpendingByCategoryReportGenerator {
   generate(
@@ -19,7 +20,7 @@ export class SpendingByCategoryReportGenerator {
       markdown += `| Category | Amount | Transactions |\n`;
       markdown += `| -------- | ------ | ------------ |\n`;
       group.categories.forEach((category) => {
-        markdown += `| ${category.name} | ${formatAmount(category.total)} | ${category.transactions} |\n`;
+        markdown += `| ${escapeTableCell(category.name)} | ${formatAmount(category.total)} | ${category.transactions} |\n`;
       });
       markdown += `\n`;
     });

@@ -1,5 +1,6 @@
 // Generates the response/report for get-transactions tool
 import type { MappedTransaction } from './transaction-mapper.js';
+import { escapeTableCell as esc } from '../../utils/markdown.js';
 
 export class GetTransactionsReportGenerator {
   generate(
@@ -19,10 +20,10 @@ export class GetTransactionsReportGenerator {
   // update-transaction, e.g. to turn one leg into a transfer — is visible without adding a
   // second table or changing the column count consumers already parse.
   private _rowsFor(t: MappedTransaction): string[] {
-    const parentRow = `| ${t.id} | ${t.date} | ${t.payee} | ${t.category} | ${t.amount} | ${t.cleared} | ${t.notes} | ${t.transferId} |`;
+    const parentRow = `| ${t.id} | ${t.date} | ${esc(t.payee)} | ${esc(t.category)} | ${t.amount} | ${t.cleared} | ${esc(t.notes)} | ${t.transferId} |`;
     const subRows = (t.subtransactions ?? []).map(
       (sub) =>
-        `| ↳ ${sub.id} | ${sub.date} | ${sub.payee} | ${sub.category} | ${sub.amount} | ${sub.cleared} | ${sub.notes} | ${sub.transferId} |`
+        `| ↳ ${sub.id} | ${sub.date} | ${esc(sub.payee)} | ${esc(sub.category)} | ${sub.amount} | ${sub.cleared} | ${esc(sub.notes)} | ${sub.transferId} |`
     );
     return [parentRow, ...subRows];
   }
