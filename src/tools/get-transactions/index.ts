@@ -4,6 +4,7 @@ import { GetTransactionsInputParser } from './input-parser.js';
 import { GetTransactionsDataFetcher } from './data-fetcher.js';
 import { GetTransactionsMapper } from './transaction-mapper.js';
 import { GetTransactionsReportGenerator } from './report-generator.js';
+import { isUncategorized } from './filters.js';
 import { success, errorFromCatch } from '../../utils/response.js';
 import { getDateRange } from '../../utils.js';
 import { GetTransactionsArgsSchema, type GetTransactionsArgs, type ToolInput } from '../../types.js';
@@ -19,7 +20,8 @@ export const schema = {
 export async function handler(args: GetTransactionsArgs): Promise<CallToolResult> {
   try {
     const input = new GetTransactionsInputParser().parse(args);
-    const { accountId, startDate, endDate, minAmount, maxAmount, categoryName, payeeName, limit } = input;
+    const { accountId, startDate, endDate, minAmount, maxAmount, categoryName, payeeName, uncategorized, limit } =
+      input;
     const { startDate: start, endDate: end } = getDateRange(startDate, endDate);
 
     // Fetch transactions
@@ -37,6 +39,9 @@ export async function handler(args: GetTransactionsArgs): Promise<CallToolResult
     if (categoryName) {
       const lowerCategory = categoryName.toLowerCase();
       filtered = filtered.filter((t) => (t.category_name || '').toLowerCase().includes(lowerCategory));
+    }
+    if (uncategorized) {
+      filtered = filtered.filter(isUncategorized);
     }
     if (payeeName) {
       const lowerPayee = payeeName.toLowerCase();
@@ -56,6 +61,7 @@ export async function handler(args: GetTransactionsArgs): Promise<CallToolResult
       maxAmount !== undefined ? `Max amount: $${maxAmount.toFixed(2)}` : null,
       categoryName ? `Category: ${categoryName}` : null,
       payeeName ? `Payee: ${payeeName}` : null,
+      uncategorized ? 'Uncategorized only' : null,
     ]
       .filter(Boolean)
       .join(', ');

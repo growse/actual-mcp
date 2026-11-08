@@ -16,6 +16,13 @@ describe('GetTransactionsInputParser', () => {
     expect(result.payeeName).toBe('Amazon');
   });
 
+  it('parses the uncategorized flag, ignoring non-boolean values', () => {
+    const parser = new GetTransactionsInputParser();
+
+    expect(parser.parse({ uncategorized: true }).uncategorized).toBe(true);
+    expect(parser.parse({ uncategorized: 'yes' }).uncategorized).toBeUndefined();
+  });
+
   it('rejects non-object arguments', () => {
     expect(() => new GetTransactionsInputParser().parse(null)).toThrow('Arguments must be an object');
   });

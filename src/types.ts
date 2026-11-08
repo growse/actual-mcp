@@ -20,6 +20,12 @@ export const GetTransactionsArgsSchema = z.object({
   maxAmount: z.number().optional(),
   categoryName: z.string().optional(),
   payeeName: z.string().optional(),
+  uncategorized: z
+    .boolean()
+    .optional()
+    .describe(
+      'Only return transactions that still need a category: no category and not a transfer. A split counts if any of its legs is uncategorised.'
+    ),
   limit: z.number().optional(),
 });
 
