@@ -42,6 +42,7 @@ import * as updatePayee from './payees/update-payee/index.js';
 import * as createRule from './rules/create-rule/index.js';
 import * as deleteRule from './rules/delete-rule/index.js';
 import * as getRules from './rules/get-rules/index.js';
+import * as runRules from './rules/run-rules/index.js';
 import * as updateRule from './rules/update-rule/index.js';
 import * as spendingByCategory from './spending-by-category/index.js';
 import * as deleteTransaction from './delete-transaction/index.js';
@@ -55,6 +56,7 @@ import * as resetBudgetHold from './budgets/reset-budget-hold/index.js';
 import * as createTransaction from './create-transaction/index.js';
 import * as importTransactions from './import-transactions/index.js';
 import * as runBankSync from './run-bank-sync/index.js';
+import * as linkTransfers from './transfers/link-transfers/index.js';
 
 const readTools = [
   getTransactions,
@@ -90,6 +92,8 @@ const writeTools = [
   createRule,
   updateRule,
   deleteRule,
+  runRules,
+  linkTransfers,
   updateTransaction,
   deleteTransaction,
   createTransaction,

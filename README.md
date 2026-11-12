@@ -73,6 +73,11 @@ The Actual Budget MCP Server allows you to interact with your personal financial
 - **`create-rule`** - Create a new transaction rule with conditions and actions
 - **`update-rule`** - Update an existing transaction rule
 - **`delete-rule`** - Delete a transaction rule
+- **`run-rules`** - Apply all rules to existing uncategorized transactions, optionally limited to one account
+
+#### Transfers
+
+- **`link-transfers`** - Detect and link unmatched transfers between on-budget accounts (payee name matches an account name, same date, opposite amount); supports `dryRun` to preview
 
 ### Prompts
 

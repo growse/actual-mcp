@@ -362,3 +362,11 @@ export function holdBudgetForNextMonth(month: string, value: number): Promise<bo
 export function resetBudgetHold(month: string): Promise<void> {
   return getActualConnection().run(() => api.resetBudgetHold(month));
 }
+
+export {
+  runRulesOnTransactions,
+  linkTransferTransactions,
+  type RunRulesResult,
+  type TransferPair,
+  type LinkTransfersResult,
+} from './actual-api-maintenance.js';
